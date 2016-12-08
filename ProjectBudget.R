@@ -344,3 +344,4 @@ abline(h=0,v=0)
 
 plot(PCA$scores[,1], PCA$scores[,3], type='n')
 text(PCA$scores[,1], PCA$scores[,3], labels=(rownames(PCA$scores)), col=color)
+ #comment test
