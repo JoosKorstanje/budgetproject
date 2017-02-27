@@ -1,0 +1,19 @@
+The aim of this project, that should be done by groups (4 or 5 students together), is to be able to
+propose an analysis of the data contained in the file Budget.txt.
+Those date concern the budget from 1872 to 1971 in France and you have the different spending :
+• AN : year
+• PVP : authorities
+• AGR : agriculture
+• CMI : trades and companies
+• TRA : work
+• LOG : accommodations
+• EDU : education
+• ACS : social action
+• ANC : veterans
+• DEF : defense
+• DET : debt refund
+• DIV : various
+The individuals are the years.
+The variables are the percent of the budget devoted to each category.
+I would like that you focus on the analysis of the individuals and of the variables.
+And I would like that you consider also the use of the FactoMineR package.
