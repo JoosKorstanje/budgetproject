@@ -1,5 +1,5 @@
-setwd('G:/LaptopOleStuff/Advanced stat + ML/20161129/project')
-getwd()
+#setwd('')
+#getwd()
 
 rm(list=ls())
 
