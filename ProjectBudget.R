@@ -1,140 +1,81 @@
-setwd('C:/Users/joos_/Desktop/LaptopOleStuff/Advanced stat + ML/20161129/project')
+setwd('G:/LaptopOleStuff/Advanced stat + ML/20161129/project')
 getwd()
 
 rm(list=ls())
 
+#Getting the data
 budgetdata = read.table("Budget.txt", sep = ",")
 budgetdata
+
+#The first column of the budgetdata are years. Creating one data frame with the years and one without.
 budgetdata[,1]
 budgetdata2=budgetdata[2:12]
 rownames(budgetdata2) = budgetdata[,1]
 budgetdata2
+
+#Add column names to the two data frames.
 names(budgetdata2) = c("authorities", "agriculture", "tradesandcompanies", "work", "accomodations", "education", "socialaction", "veterans", "defense", "debtrefund", "various")
-
 names(budgetdata) = c("year", "authorities", "agriculture", "tradesandcompanies", "work", "accomodations", "education", "socialaction", "veterans", "defense", "debtrefund", "various")
-#WRONG# names(budgetdata) = {year, authorities, agriculture, tradesandcompanies, work, accomodations, education, socialaction, veterans, defense, debtrefund}
-#WRONG# names(budgetdata) = {"year", "authorities", "agriculture", "tradesandcompanies", "work", "accomodations", "education", "socialaction", "veterans", "defense", "debtrefund"}
 
+#Creating a matrix out of the data frame.
 budgetdata2
 budgetmatrix=as.matrix(budgetdata2)
 budgetmatrix
 
-#####DESCRIPTIVES####
+####DESCRIPTIVE STATISTICS####
+#Calculating several descriptive statistics
 means=apply(budgetmatrix, 2, mean)
 stdevs=apply(budgetmatrix, 2, sd)
 mins=apply(budgetmatrix, 2, min)
 maxs=apply(budgetmatrix, 2, max)
 
+#Printing the descriptive statistcs
 means
 stdevs
 mins
 maxs
 
+#Adding the variable names to the matrix.
 varnames=colnames(budgetmatrix)
 varnames
 
-###TABLE OF MEAN, STDEV, MIN, MAX
-explore=cbind(means, stdevs, mins, maxs) #cbind binds columns, rbind binds rows
+#Putting all the descriptives in one table.
+explore=cbind(means, stdevs, mins, maxs)
 explore
-X11()
-
-#CONVERT MATRIX TO DATA FRAME FOR THE HIST FUNCTION
-budgetframe=as.data.frame(budgetmatrix)
-budgetframe
-#names(budgetframe)=c("authorities", "agriculture", "tradesandcompanies", "work", "accomodations", "education", "socialaction", "veterans", "defense", "debtrefund", "various")
 
 
-#FUNCTION FOR CREATING MANYH HISTOGRAMS
-#myfunction<-function(amatrix){
-#  
-#  for (i in (1 : length(names(amatrix)))){
-#    X11()
-#    hist(amatrix[,i], main=(names(amatrix))[i])
-#    }
-#}
+#graphics.off()
 
-#my_f <-function(mydataset){
-#  for (i in 1:length(mydataset)){
-#    X11()
-#    hist(mydataset[,i], main=paste("Plot",i))
-#  }
-#}
-
-#myfunction(budgetframe)
-#length()
-#n=names(budgetframe)
-
-###This one works:
-#my_f2 <-function(mydataset){
-#  for (i in 1:length(mydataset)){
-#    X11()
-#    hist(mydataset[,i], main=(names(mydataset))[i])
-#  }
-#}
-
-my_f2(budgetframe)
-
-graphics.off()
-#TRYING IN ONE WINDOW: WORKS!
+#Function to create a histogram per variable in one plot window
 my_f3 <-function(mydataset){
-  par(mar = rep(2, 4)) #set the margin to 2, so it fits in the window
-  par(mfrow=c(4,3)) #make 4 rows and 3 colums in the plotting window
+  par(mar = rep(2, 4))
+  par(mfrow=c(4,3))
   for (i in 1:length(mydataset)){
     hist(mydataset[,i], main=(names(mydataset))[i],freq=FALSE)
   }
 }
-my_f3(budgetframe)
-
-#apply(budgetmatrix, 2, myfunction(budgetmatrix, varnames))
-#budgetframe
-#myfunction(budgetmatrix)
-#myfunction(budgetframe)
-
-#?hist
-
-#?plot
+my_f3(budgetdata2)
 
 
-#?qqnorm
-
-#FUNCTION TO GET QQPLOTS: WORKS!
+#Function to create a qq-plot per variable in one plot window
 my_qqplots <-function(mydataset){
-  par(mar = rep(2, 4)) #set the margin to 2, so it fits in the window
-  par(mfrow=c(4,3)) #make 4 rows and 3 colums in the plotting window
+  par(mar = rep(2, 4))
+  par(mfrow=c(4,3))
   for (i in 1:length(mydataset)){
     qqnorm(mydataset[,i], main=(names(mydataset))[i])
     qqline(mydataset[,i])
   }
 }
-my_qqplots(budgetframe)
+my_qqplots(budgetdata2)
 
 
-#BOXPLOTS
-?boxplot
-budgetmatrix=as.matrix(budgetframe)
-budgetframe
-budgetmatrix
+#Creating boxplots
 par(mfrow=c(1,1))
-boxplot(budgetmatrix)
+boxplot(budgetdata2)
 
-#Looking at evolution through time
-year=budgetdata[,1]
-length(y)
-plot(budgetdata[-1]~budgetdata[1], type='l')
-budgetdata[-1]
-xrange=seq(1850,2000,50)
-yrange=seq(0,100,10)
-
-?plot
-
-
-
-?par
-###################LIENGRAPH TO SHOW CHANGES OVER TIME#############
-
+#Function to create a line graph per variable in one plot window
 
 graphics.off()
-
 par(mar=c(4, 4, 4, 10),xpd=TRUE)
 
 my_lines <-function(xvariable,yvariables){
@@ -151,95 +92,44 @@ my_lines(year,budgetmatrix)
 legend(x=1980,y=25,legend=(colnames(budgetmatrix)), cex=0.8, lty=1, col=(c(palette(), palette()[1:4])), title="My Title")
 
 
-###################
 
-
-colnames(budgetmatrix)
-budgetmatrix
-palette()
-?lines
-palette()[1]
-warnings()
-#NOT WORKING YET!!
-##legend(1900, 14, legend=names(budgetmatrix),col=c('red'), lty=1:12, cex=0.8)
-
-
-
-#my_legend(budgetmatrix)
-#?legend
-#legend(x=1900,y=12,legend=(colnames(budgetmatrix)), cex=0.8, col=colors, title="My Title")
-#(c(palette(), palette()[1:4]))
-
-
-
-
-#############BOXPLOT PER YEAR#########################
-budgetmatrix=as.matrix(budgetframe)
-budgetframe
-budgetmatrix
+#Creating boxpltos per year instead of per variable
+#graphics.off()
 par(mfrow=c(1,1))
-boxplot(budgetmatrix)
-
 yearbudgetmatrix=t(budgetmatrix)
 boxplot(yearbudgetmatrix)
-#############DOESNT SEEM VERY USEFUL#######################
 
 
-
-
-
-#############CORRELATION####################
+#Checking for correlation
 cor(budgetmatrix)
-#cor(yearbudgetmatrix)
+cor(yearbudgetmatrix)
 
 
-### HEATMAP #####################
-install.packages('ggplot2') #joos
-library(ggplot2) #joos
+#Creating a heatmap of correlations
+install.packages('ggplot2')
+library(ggplot2)
 install.packages('reshape2')
 library(reshape2)
 
-
-?ggplot
-?ggplot2 #joos
-?cormat #joos
-?round #joos
-?melt #joos
-?reshape2 #joos
-
-budgetmatrix
+#Creating input for ggplot heatmap
 cormat<-round(cor(budgetmatrix),2)
-#cormat<-get_upper_tri(cormat)
-cormat #joos
 cormat<-melt(cormat) #makes combination of correlation (different format, not really like a matrix)
-cormat
 
+#Creating ggplot heatmap
 ggplot(data=data.frame(cormat),aes(fill=value,x=Var1, y=Var2))+geom_tile(color="white")+
   scale_fill_gradient2(low = "blue", high = "blue", mid = "orange", midpoint = 0, limit = c(-1,1), space = "Lab",name="Pearson\nCorrelation")
 
-?aes
 
-?geom_tile
-?scale_fill_gradient2
-str(cormat)
-
-
-################heatmap for years#################
+#Creating heatmap for years
 coryears=cor(yearbudgetmatrix)
 cormatrixyear=melt(coryears)
-cormatrixyear
 
 ggplot(data=data.frame(cormatrixyear),aes(fill=value,x=Var1, y=Var2))+geom_tile(color="white")+
   scale_fill_gradient2(low = "black", high = "black", mid = "white", midpoint = 0, limit = c(-1,1), space = "Lab",name="Pearson\nCorrelation")
 
-###################maybe good for later#################
 
-
-
-###########PRINCOMP###########
-budgetframe
-PCA=princomp(budgetframe, cor=TRUE)
-names(PCA)
+####Principal Components Analysis####
+PCA=princomp(budgetdata2, cor=TRUE)
 
 PCA
 summary(PCA)
@@ -272,7 +162,7 @@ abline(h=0, v=0)
 
 
 
-#comp 3?: no idea
+#comp 3: no clear interpretation
 plot(PCA$scores[,1], PCA$scores[,3], xlab='Component 1', ylab='Component 3', type='n') #empty plot
 text(PCA$scores[,1], PCA$scores[,3], labels=(rownames(PCA$scores)))
 abline(h=0, v=0)
@@ -299,49 +189,43 @@ PCA$loadings
 
 # veterans
 
-
-rownames(PCA$scores)
-
-
-######HIERARCHICAL
-
-
-
-scale(budgetframe) #joos
-dsjoos=dist(scale(budgetframe))
+####Clustering####
+#Decide on k for k-means based on hclust
+dsjoos=dist(scale(budgetdata2))
 hclustjoos <- hclust(dsjoos,method="ward.D2")
 plot(hclustjoos)
-#TWO OR THREE GROUPS
+#Decision: two or three clusters
 
 
-
-
-
-#########KMEANS#################
-
-?kmeans
-budgetframe
-kmeansjoos=kmeans(budgetframe, 2)
+#k-means
+kmeansjoos=kmeans(budgetdata2, 2)
 color=kmeansjoos$cluster
+
+#With two clusters:
+#Plot first factorial plane
 plot(PCA$scores[,1], PCA$scores[,2], type='n')
 text(PCA$scores[,1], PCA$scores[,2], labels=(rownames(PCA$scores)), col=color)
 abline(h=0,v=0)
 
+#Plot second factorial plane
 plot(PCA$scores[,1], PCA$scores[,3], type='n')
 text(PCA$scores[,1], PCA$scores[,3], labels=(rownames(PCA$scores)), col=color)
 
+#Look at output
 kmeansjoos
 
-plot(budgetframe, col = kmeansjoos$cluster) #THIS IS NOT A VERY USEFUL PLOT
 
 
-##WITH 3 GROUPS
-kmeansjoos=kmeans(budgetframe, 3)
+#With 3 clusters
+kmeansjoos=kmeans(budgetdata2, 3)
 color=kmeansjoos$cluster
+
+#Plot first factorial plane
 plot(PCA$scores[,1], PCA$scores[,2], type='n')
 text(PCA$scores[,1], PCA$scores[,2], labels=(rownames(PCA$scores)), col=color)
 abline(h=0,v=0)
 
+#Plot second factorial plane
 plot(PCA$scores[,1], PCA$scores[,3], type='n')
 text(PCA$scores[,1], PCA$scores[,3], labels=(rownames(PCA$scores)), col=color)
- #comment test
+abline(h=0,v=0)
